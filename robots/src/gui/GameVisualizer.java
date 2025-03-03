@@ -1,10 +1,6 @@
 package gui;
 
-import java.awt.Color;
-import java.awt.EventQueue;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
@@ -28,6 +24,15 @@ public class GameVisualizer extends JPanel {
         initializeTimer();
         addMouseListener(new MouseClickListener());
         setDoubleBuffered(true);
+        setPreferredSize(new Dimension(400, 400));
+        setSize(500, 500);
+    }
+    public double getM_robotPositionX(){
+        return m_robotPositionX;
+    }
+
+    public double getM_robotPositionY() {
+        return m_robotPositionY;
     }
 
     private void initializeTimer() {
@@ -55,16 +60,20 @@ public class GameVisualizer extends JPanel {
         }
     }
 
-    private void setTargetPosition(Point point) {
+    public void setTargetPosition(Point point) {
+        System.out.println("Click at: (" + point.x + ", " + point.y + ")");
         m_targetPositionX = point.x;
         m_targetPositionY = point.y;
+        System.out.println("Target set at: (" + m_targetPositionX + ", " + m_targetPositionY + ")");
+        repaint();
     }
+
 
     private void onRedrawEvent() {
         EventQueue.invokeLater(this::repaint);
     }
 
-    private void onModelUpdateEvent() {
+    public void onModelUpdateEvent() {
         double distanceToTarget = calculateDistance(m_targetPositionX, m_targetPositionY, m_robotPositionX, m_robotPositionY);
         if (distanceToTarget < 0.5) {
             return;
@@ -112,24 +121,25 @@ public class GameVisualizer extends JPanel {
         if (!Double.isFinite(newY)) {
             newY = m_robotPositionY + velocity * duration * Math.sin(m_robotDirection);
         }
+
         int width = getWidth();
         int height = getHeight();
 
         if (newX < 0) {
-            newX = width;
+            newX = width + newX;
         } else if (newX > width) {
-            newX = 0;
+            newX = newX - width;
         }
 
         if (newY < 0) {
-            newY = height;
+            newY = height + newY;
         } else if (newY > height) {
-            newY = 0;
+            newY = newY - height;
         }
+
         m_robotPositionX = newX;
         m_robotPositionY = newY;
         m_robotDirection = normalizeAngle(m_robotDirection + angularVelocity * duration);
-
     }
 
     private double applyLimits(double value, double min, double max) {

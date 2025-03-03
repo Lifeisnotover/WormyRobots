@@ -9,6 +9,11 @@ import log.Logger;
 public class MenuBuilder {
 
     private final JMenuBar menuBar = new JMenuBar();
+    private final JFrame mainFrame;
+
+    public MenuBuilder(JFrame mainFrame) {
+        this.mainFrame = mainFrame;
+    }
 
 
     public JMenuBar buildMenuBar() {
@@ -78,6 +83,22 @@ public class MenuBuilder {
             SwingUtilities.updateComponentTreeUI((JFrame) menuBar.getTopLevelAncestor());
         } catch (Exception e) {
             // Игнорируем ошибки
+        }
+    }
+
+    public void confirmExit() {
+        int confirmed = JOptionPane.showOptionDialog(
+                mainFrame,
+                "Вы уверены, что хотите выйти?",
+                "Подтверждение выхода",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                new Object[]{"Да", "Нет"},
+                "Нет"
+        );
+        if (confirmed == JOptionPane.YES_OPTION) {
+            System.exit(0);
         }
     }
 }

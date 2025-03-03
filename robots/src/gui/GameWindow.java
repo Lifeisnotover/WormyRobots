@@ -1,6 +1,6 @@
 package gui;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
@@ -13,7 +13,11 @@ public class GameWindow extends JInternalFrame {
         panel.add(m_visualizer, BorderLayout.CENTER);
         getContentPane().add(panel);
         pack();
+        setSize(500, 500);
+        System.out.println("GameWindow size: " + getSize());
+        System.out.println("GameVisualizer size: " + m_visualizer.getSize());
     }
+
 }
 
 

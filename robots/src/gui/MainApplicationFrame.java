@@ -2,25 +2,20 @@ package gui;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import javax.swing.JDesktopPane;
-import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
+import javax.swing.*;
 
 import log.Logger;
 
 public class MainApplicationFrame extends JFrame {
     private final JDesktopPane desktopPane = new JDesktopPane();
+    private final MenuBuilder menuBuilder;
 
     public MainApplicationFrame() {
-
         int inset = 50;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds(inset, inset,
-                screenSize.width - inset * 2,
-                screenSize.height - inset * 2);
+        setBounds(inset, inset, screenSize.width - inset * 2, screenSize.height - inset * 2);
 
         setContentPane(desktopPane);
-
 
         LogWindow logWindow = createLogWindow();
         addWindow(logWindow);
@@ -29,12 +24,22 @@ public class MainApplicationFrame extends JFrame {
         gameWindow.setSize(400, 400);
         addWindow(gameWindow);
 
+        this.menuBuilder = new MenuBuilder(this);
+        setJMenuBar(menuBuilder.buildMenuBar());
 
-        setJMenuBar(new MenuBuilder().buildMenuBar());
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                menuBuilder.confirmExit();
+            }
+        });
 
-
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
+    }
+
+    public JMenuBar getJMenuBar() {
+        return menuBuilder.buildMenuBar();
     }
 
     protected LogWindow createLogWindow() {
