@@ -3,7 +3,6 @@ package gui;
 import javax.swing.*;
 import java.awt.event.KeyEvent;
 
-
 import log.Logger;
 
 public class MenuBuilder {
@@ -34,7 +33,7 @@ public class MenuBuilder {
                     JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
                     new Object[]{"Да", "Нет"}, "Нет");
             if (confirmed == JOptionPane.YES_OPTION) {
-                System.exit(0);
+                mainFrame.dispose();
             }
         });
 
@@ -98,7 +97,10 @@ public class MenuBuilder {
                 "Нет"
         );
         if (confirmed == JOptionPane.YES_OPTION) {
-            System.exit(0);
+
+            WindowStateManager stateManager = new WindowStateManager();
+            stateManager.saveWindowStates(((MainApplicationFrame) mainFrame).getDesktopPane());
+            mainFrame.dispose();
         }
     }
 }

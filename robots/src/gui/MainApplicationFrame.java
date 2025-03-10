@@ -10,6 +10,7 @@ public class MainApplicationFrame extends JFrame {
     private final JDesktopPane desktopPane = new JDesktopPane();
     private final MenuBuilder menuBuilder;
 
+
     public MainApplicationFrame() {
         int inset = 50;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -34,7 +35,8 @@ public class MainApplicationFrame extends JFrame {
                 menuBuilder.confirmExit();
             }
         });
-
+        WindowStateManager stateManager = new WindowStateManager();
+        stateManager.loadWindowStates(desktopPane);
         setVisible(true);
     }
 
@@ -55,5 +57,9 @@ public class MainApplicationFrame extends JFrame {
     protected void addWindow(JInternalFrame frame) {
         desktopPane.add(frame);
         frame.setVisible(true);
+    }
+
+    public JDesktopPane getDesktopPane() {
+        return desktopPane;
     }
 }
