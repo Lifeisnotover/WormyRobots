@@ -1,10 +1,12 @@
-package gui;
+package src.gui;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.*;
 
-import log.Logger;
+import src.log.Logger;
+
+import static src.log.Logger.getDefaultLogSource;
 
 public class MainApplicationFrame extends JFrame {
     private final JDesktopPane desktopPane = new JDesktopPane();
@@ -32,11 +34,12 @@ public class MainApplicationFrame extends JFrame {
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
+
                 menuBuilder.confirmExit();
             }
         });
-        WindowStateManager stateManager = new WindowStateManager();
-        stateManager.loadWindowStates(desktopPane);
+
+        WindowStateManager.loadWindowStates(desktopPane);
         setVisible(true);
     }
 
@@ -45,7 +48,7 @@ public class MainApplicationFrame extends JFrame {
     }
 
     protected LogWindow createLogWindow() {
-        LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource());
+        LogWindow logWindow = new LogWindow(getDefaultLogSource());
         logWindow.setLocation(10, 10);
         logWindow.setSize(300, 800);
         setMinimumSize(logWindow.getSize());

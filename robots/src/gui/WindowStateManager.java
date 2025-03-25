@@ -1,8 +1,10 @@
-package gui;
+package src.gui;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 
 import javax.swing.*;
-import java.awt.*;
-import java.beans.PropertyVetoException;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -10,83 +12,48 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class WindowStateManager {
-    private static final String CONFIG_FILE = System.getProperty("user.home") + "/.robots_program_config";
+    private static final String CONFIG_FILE =
+            Paths.get(System.getProperty("user.home"), "window_states.json").toString();
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
-    public void saveWindowStates(JDesktopPane desktopPane) {
-        if (desktopPane == null) {
-            System.err.println("DesktopPane is null. Cannot save window states.");
-            return;
-        }
-
+    public static void saveWindowStates(JDesktopPane desktopPane) {
         Map<String, WindowState> states = new HashMap<>();
+
         for (JInternalFrame frame : desktopPane.getAllFrames()) {
-            WindowState state = new WindowState(
-                    frame.getLocation(),
-                    frame.getSize(),
-                    frame.isMaximum(),
-                    frame.isIcon()
-            );
-            states.put(frame.getTitle(), state);
+            if (frame instanceof RestorableWindow) {
+                RestorableWindow window = (RestorableWindow) frame;
+                states.put(window.getTitle(), window.getWindowState());
+            }
         }
 
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(CONFIG_FILE))) {
-            oos.writeObject(states);
+        try (Writer writer = Files.newBufferedWriter(Paths.get(CONFIG_FILE))) {
+            GSON.toJson(states, writer);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    @SuppressWarnings("unchecked")
-    public void loadWindowStates(JDesktopPane desktopPane) {
-        try (ObjectInputStream ois = new ObjectInputStream(Files.newInputStream(Paths.get(CONFIG_FILE)))) {
-            Map<String, WindowState> states = (Map<String, WindowState>) ois.readObject();
+
+    public static void loadWindowStates(JDesktopPane desktopPane) {
+        if (!Files.exists(Paths.get(CONFIG_FILE))) return;
+
+        try (Reader reader = Files.newBufferedReader(Paths.get(CONFIG_FILE))) {
+            Map<String, WindowState> states = GSON.fromJson(reader,
+                    new com.google.gson.reflect.TypeToken<Map<String, WindowState>>() {}.getType());
+
+            if (states == null) return;
+
             for (JInternalFrame frame : desktopPane.getAllFrames()) {
-                WindowState state = states.get(frame.getTitle());
-                if (state != null) {
-                    frame.setLocation(state.getLocation());
-                    frame.setSize(state.getSize());
-                    if (state.isMaximized()) {
-                        frame.setMaximum(true);
-                    }
-                    if (state.isIconified()){
-                        frame.setIcon(true);
+                if (frame instanceof RestorableWindow) {
+                    RestorableWindow window = (RestorableWindow) frame;
+                    WindowState state = states.get(frame.getTitle());
+                    if (state != null) {
+                        window.restoreWindowState(state);
                     }
                 }
             }
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-        } catch (PropertyVetoException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private static class WindowState implements Serializable {
-        private final Point location;
-        private final Dimension size;
-        private final boolean maximized;
-        private final boolean iconified;
-
-        public WindowState(Point location, Dimension size, boolean maximized, boolean iconified) {
-            this.location = location;
-            this.size = size;
-            this.maximized = maximized;
-            this.iconified = iconified;
-        }
-
-        public Point getLocation() {
-            return location;
-        }
-
-        public Dimension getSize() {
-            return size;
-        }
-
-        public boolean isMaximized() {
-            return maximized;
-        }
-
-        public boolean isIconified() {
-            return iconified;
         }
     }
 }
