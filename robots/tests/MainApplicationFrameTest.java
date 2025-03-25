@@ -1,15 +1,13 @@
 package tests;
 
-import src.gui.MainApplicationFrame;
+import src.gui.*;
 import org.junit.jupiter.api.Test;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class MainApplicationFrameTest {
-
     @Test
     void testExitConfirmation() {
         MainApplicationFrame frame = new MainApplicationFrame();
@@ -18,15 +16,19 @@ class MainApplicationFrameTest {
 
         Window[] windows = Window.getWindows();
         boolean confirmationDialogFound = false;
+
         for (Window window : windows) {
             if (window instanceof JDialog) {
                 JDialog dialog = (JDialog) window;
-                if (dialog.getTitle().equals("Подтверждение выхода")) {
+                if ("Подтверждение выхода".equals(dialog.getTitle())) {
                     confirmationDialogFound = true;
+                    dialog.dispose();
                     break;
                 }
             }
         }
+
         assertTrue(confirmationDialogFound, "Диалог подтверждения выхода не найден");
+        frame.dispose();
     }
 }
