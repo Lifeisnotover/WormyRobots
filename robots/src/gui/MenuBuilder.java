@@ -3,7 +3,6 @@ package src.gui;
 import javax.swing.*;
 import java.awt.event.KeyEvent;
 
-
 import src.log.Logger;
 
 public class MenuBuilder {
@@ -29,17 +28,14 @@ public class MenuBuilder {
         fileMenu.getAccessibleContext().setAccessibleDescription("Файл");
 
         addMenuItem(fileMenu, "Выход", KeyEvent.VK_X, () -> {
-            int confirmed = JOptionPane.showOptionDialog(
-                    null, "Вы уверены?", "подтверждение выхода",
-                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-                    new Object[]{"Да", "Нет"}, "Нет");
-            if (confirmed == JOptionPane.YES_OPTION) {
-                System.exit(0);
-            }
+            mainFrame.dispatchEvent(new java.awt.event.WindowEvent(
+                    mainFrame, java.awt.event.WindowEvent.WINDOW_CLOSING
+            ));
         });
 
         menuBar.add(fileMenu);
     }
+
 
     private void addLookAndFeelMenu() {
         JMenu lookAndFeelMenu = new JMenu("Режим отображения");
@@ -98,6 +94,9 @@ public class MenuBuilder {
                 "Нет"
         );
         if (confirmed == JOptionPane.YES_OPTION) {
+
+            WindowStateManager stateManager = new WindowStateManager();
+            stateManager.saveWindowStates(((MainApplicationFrame) mainFrame).getDesktopPane());
             System.exit(0);
         }
     }

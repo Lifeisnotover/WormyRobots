@@ -1,11 +1,8 @@
 package src.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.TextArea;
-import javax.swing.JInternalFrame;
-import javax.swing.JPanel;
+import java.awt.*;
+
+import javax.swing.*;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 
@@ -13,14 +10,14 @@ import src.log.LogChangeListener;
 import src.log.LogEntry;
 import src.log.LogWindowSource;
 
-public class LogWindow extends JInternalFrame implements LogChangeListener {
+public class LogWindow extends RestorableWindow implements LogChangeListener {
     private final LogWindowSource m_logSource;
     private final TextArea m_logContent;
 
     public LogWindow(LogWindowSource logSource) {
-        super("Протокол работы", true, true, true, true);
+        super("Протокол работы");
         m_logSource = logSource;
-        m_logSource.registerListener(this); // Подписка на изменения лога
+        m_logSource.registerListener(this);
 
         m_logContent = new TextArea();
         m_logContent.setEditable(false);
@@ -33,7 +30,7 @@ public class LogWindow extends JInternalFrame implements LogChangeListener {
         addInternalFrameListener(new InternalFrameAdapter() {
             @Override
             public void internalFrameClosing(InternalFrameEvent e) {
-                dispose();   // закрываем окно корректно, чтобы слушатели не копились
+                dispose();
             }
         });
 
@@ -60,8 +57,6 @@ public class LogWindow extends JInternalFrame implements LogChangeListener {
 
     @Override
     public void dispose() {
-        // Удаляем LogWindow когда закрываем окно это чтобы память не утекала в трубу и метод
-        // переопределили потому что такой уже есть в JInternalFrame
         m_logSource.unregisterListener(this);
         super.dispose();
     }
