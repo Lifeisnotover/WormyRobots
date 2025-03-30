@@ -1,4 +1,4 @@
-package gui;
+package src.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -9,9 +9,9 @@ import javax.swing.JPanel;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 
-import log.LogChangeListener;
-import log.LogEntry;
-import log.LogWindowSource;
+import src.log.LogChangeListener;
+import src.log.LogEntry;
+import src.log.LogWindowSource;
 
 public class LogWindow extends JInternalFrame implements LogChangeListener {
     private final LogWindowSource m_logSource;

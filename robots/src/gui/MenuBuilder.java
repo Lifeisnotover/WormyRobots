@@ -1,10 +1,10 @@
-package gui;
+package src.gui;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
 
 
-import log.Logger;
+import src.log.Logger;
 
 public class MenuBuilder {
 
