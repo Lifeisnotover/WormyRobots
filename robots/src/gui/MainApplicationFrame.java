@@ -6,9 +6,12 @@ import javax.swing.*;
 
 import src.log.Logger;
 
+import static src.log.Logger.getDefaultLogSource;
+
 public class MainApplicationFrame extends JFrame {
     private final JDesktopPane desktopPane = new JDesktopPane();
     private final MenuBuilder menuBuilder;
+
 
     public MainApplicationFrame() {
         int inset = 50;
@@ -31,10 +34,12 @@ public class MainApplicationFrame extends JFrame {
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
+
                 menuBuilder.confirmExit();
             }
         });
 
+        WindowStateManager.loadWindowStates(desktopPane);
         setVisible(true);
     }
 
@@ -43,7 +48,7 @@ public class MainApplicationFrame extends JFrame {
     }
 
     protected LogWindow createLogWindow() {
-        LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource());
+        LogWindow logWindow = new LogWindow(getDefaultLogSource());
         logWindow.setLocation(10, 10);
         logWindow.setSize(300, 800);
         setMinimumSize(logWindow.getSize());
@@ -55,5 +60,9 @@ public class MainApplicationFrame extends JFrame {
     protected void addWindow(JInternalFrame frame) {
         desktopPane.add(frame);
         frame.setVisible(true);
+    }
+
+    public JDesktopPane getDesktopPane() {
+        return desktopPane;
     }
 }
