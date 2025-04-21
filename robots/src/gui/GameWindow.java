@@ -1,19 +1,26 @@
 package src.gui;
 
-
 import java.awt.*;
 import javax.swing.*;
 
 public class GameWindow extends RestorableWindow {
-    public GameWindow() {
+    private final GameVisualizer visualizer;
+
+    public GameWindow(RobotModel robotModel) {
         super("Игровое поле");
 
-        GameVisualizer m_visualizer = new GameVisualizer();
+        visualizer = new GameVisualizer(robotModel);
+        robotModel.addObserver(visualizer);
+
         JPanel panel = new JPanel(new BorderLayout());
-        panel.add(m_visualizer, BorderLayout.CENTER);
+        panel.add(visualizer, BorderLayout.CENTER);
         getContentPane().add(panel);
 
         pack();
         setSize(500, 500);
+    }
+
+    public GameVisualizer getVisualizer() {
+        return visualizer;
     }
 }
