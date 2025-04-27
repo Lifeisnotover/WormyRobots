@@ -1,4 +1,4 @@
-package src.log;
+package src.model.log;
 
 public enum LogLevel {
     Trace(0),

@@ -1,4 +1,4 @@
-package src.gui;
+package src.controller;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -6,9 +6,14 @@ import javax.swing.*;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import src.log.Logger;
+import src.view.utilits.WindowStateManager;
+import src.model.log.Logger;
+import src.model.RobotModel;
+import src.view.GameWindow;
+import src.view.LogWindow;
+import src.view.RobotCoordinatesWindow;
 
-import static src.log.Logger.getDefaultLogSource;
+import static src.model.log.Logger.getDefaultLogSource;
 
 public class MainApplicationFrame extends JFrame {
     private final JDesktopPane desktopPane = new JDesktopPane();

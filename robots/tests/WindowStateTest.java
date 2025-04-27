@@ -1,7 +1,9 @@
 package tests;
 
 import org.junit.jupiter.api.Test;
-import src.gui.*;
+import src.view.utilits.RestorableWindow;
+import src.view.utilits.WindowState;
+
 import static org.junit.jupiter.api.Assertions.*;
 import java.awt.*;
 import java.beans.PropertyVetoException;

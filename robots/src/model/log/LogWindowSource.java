@@ -1,4 +1,4 @@
-package src.log;
+package src.model.log;
 
 
 import java.lang.ref.WeakReference;

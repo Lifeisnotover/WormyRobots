@@ -1,4 +1,4 @@
-package src.gui;
+package src.view.utilits;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

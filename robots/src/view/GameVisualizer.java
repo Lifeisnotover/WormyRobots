@@ -1,4 +1,6 @@
-package src.gui;
+package src.view;
+
+import src.model.RobotModel;
 
 import java.awt.*;
 import java.awt.event.*;

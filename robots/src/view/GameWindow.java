@@ -1,4 +1,7 @@
-package src.gui;
+package src.view;
+
+import src.view.utilits.RestorableWindow;
+import src.model.RobotModel;
 
 import java.awt.*;
 import javax.swing.*;

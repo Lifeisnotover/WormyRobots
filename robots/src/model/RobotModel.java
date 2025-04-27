@@ -1,4 +1,4 @@
-package src.gui;
+package src.model;
 
 import java.util.Observable;
 
@@ -32,8 +32,6 @@ public class RobotModel extends Observable {
         double angleToTarget = calculateAngleToTarget();
         double angularVelocity = calculateAngularVelocity(angleToTarget);
         moveRobot(MAX_VELOCITY, angularVelocity, duration);
-        setChanged();
-        notifyObservers();
     }
 
     private double distanceToTarget() {

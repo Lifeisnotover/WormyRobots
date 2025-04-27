@@ -1,6 +1,6 @@
 package tests;
 
-import src.gui.*;
+import src.controller.MainApplicationFrame;
 import org.junit.jupiter.api.Test;
 import javax.swing.*;
 import java.awt.*;
