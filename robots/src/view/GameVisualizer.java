@@ -7,10 +7,17 @@ import java.awt.event.*;
 import java.awt.geom.AffineTransform;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.*;
 
 public class GameVisualizer extends JPanel implements Observer {
     private final RobotModel robotModel;
+    private volatile double robotX = 0;
+    private volatile double robotY = 0;
+    private volatile double robotDirection = 0;
+    private volatile int targetX = 0;
+    private volatile int targetY = 0;
 
     public GameVisualizer(RobotModel robotModel) {
         this.robotModel = robotModel;
@@ -24,11 +31,23 @@ public class GameVisualizer extends JPanel implements Observer {
                 robotModel.setTargetPosition(e.getX(), e.getY());
             }
         });
+
+        Timer repaintTimer = new Timer("Repaint timer", true);
+        repaintTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                SwingUtilities.invokeLater(GameVisualizer.this::repaint);
+            }
+        }, 0, 1);
     }
 
+    @Override
     public void update(Observable o, Object arg) {
-        repaint();
-
+        this.robotX = robotModel.getRobotPositionX();
+        this.robotY = robotModel.getRobotPositionY();
+        this.robotDirection = robotModel.getRobotDirection();
+        this.targetX = robotModel.getTargetPositionX();
+        this.targetY = robotModel.getTargetPositionY();
     }
 
     @Override
@@ -36,14 +55,8 @@ public class GameVisualizer extends JPanel implements Observer {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
 
-        drawRobot(g2d,
-                (int) robotModel.getRobotPositionX(),
-                (int) robotModel.getRobotPositionY(),
-                robotModel.getRobotDirection());
-
-        drawTarget(g2d,
-                robotModel.getTargetPositionX(),
-                robotModel.getTargetPositionY());
+        drawRobot(g2d, (int) robotX, (int) robotY, robotDirection);
+        drawTarget(g2d, targetX, targetY);
     }
 
     private void drawRobot(Graphics2D g, int x, int y, double direction) {

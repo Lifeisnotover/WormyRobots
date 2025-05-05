@@ -1,6 +1,9 @@
 package src.model;
 
 import java.util.Observable;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class RobotModel extends Observable {
     private static final double MAX_VELOCITY = 0.1;
@@ -17,6 +20,12 @@ public class RobotModel extends Observable {
     public double getRobotDirection() { return robotDirection; }
     public int getTargetPositionX() { return targetPositionX; }
     public int getTargetPositionY() { return targetPositionY; }
+
+    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+
+    public RobotModel() {
+        scheduler.scheduleAtFixedRate(() -> updatePosition(10), 0, 10, TimeUnit.MILLISECONDS);
+    }
 
     public void setTargetPosition(int x, int y) {
         targetPositionX = x;
@@ -102,5 +111,4 @@ public class RobotModel extends Observable {
         while (angle >= 2 * Math.PI) angle -= 2 * Math.PI;
         return angle;
     }
-
 }
