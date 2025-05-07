@@ -11,6 +11,7 @@ import java.util.Observer;
 public class RobotCoordinatesWindow extends RestorableWindow implements Observer {
     private final JLabel coordinatesLabel;
     private final RobotModel robotModel;
+    private RobotModel.RobotState robotState;
 
     public RobotCoordinatesWindow(RobotModel robotModel) {
         super("Координаты робота");
@@ -31,13 +32,10 @@ public class RobotCoordinatesWindow extends RestorableWindow implements Observer
 
     @Override
     public void update(Observable o, Object arg) {
-        double x = robotModel.getRobotPositionX();
-        double y = robotModel.getRobotPositionY();
-        double direction = Math.toDegrees(robotModel.getRobotDirection());
-
+        this.robotState = (RobotModel.RobotState) arg;
         SwingUtilities.invokeLater(() -> {
             coordinatesLabel.setText(String.format("X: %.2f, Y: %.2f, Угол: %.2f°",
-                    x, y, direction));
+                    robotState.x, robotState.y, robotState.direction));
         });
     }
 

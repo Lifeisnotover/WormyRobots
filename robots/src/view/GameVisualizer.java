@@ -18,7 +18,7 @@ public class GameVisualizer extends JPanel implements Observer {
     private volatile double robotDirection = 0;
     private volatile int targetX = 0;
     private volatile int targetY = 0;
-
+    private RobotModel.RobotState robotState;
     public GameVisualizer(RobotModel robotModel) {
         this.robotModel = robotModel;
         this.robotModel.addObserver(this);
@@ -43,11 +43,7 @@ public class GameVisualizer extends JPanel implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        this.robotX = robotModel.getRobotPositionX();
-        this.robotY = robotModel.getRobotPositionY();
-        this.robotDirection = robotModel.getRobotDirection();
-        this.targetX = robotModel.getTargetPositionX();
-        this.targetY = robotModel.getTargetPositionY();
+        this.robotState = (RobotModel.RobotState) arg;
     }
 
     @Override
@@ -55,8 +51,8 @@ public class GameVisualizer extends JPanel implements Observer {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
 
-        drawRobot(g2d, (int) robotX, (int) robotY, robotDirection);
-        drawTarget(g2d, targetX, targetY);
+        drawRobot(g2d, (int) robotState.x, (int) robotState.y, robotState.direction);
+        drawTarget(g2d, robotState.targetX, robotState.targetY);
     }
 
     private void drawRobot(Graphics2D g, int x, int y, double direction) {

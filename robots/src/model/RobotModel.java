@@ -15,11 +15,25 @@ public class RobotModel extends Observable {
     private volatile int targetPositionX = 150;
     private volatile int targetPositionY = 100;
 
-    public double getRobotPositionX() { return robotPositionX; }
-    public double getRobotPositionY() { return robotPositionY; }
-    public double getRobotDirection() { return robotDirection; }
-    public int getTargetPositionX() { return targetPositionX; }
-    public int getTargetPositionY() { return targetPositionY; }
+    public double getRobotPositionX() {
+        return robotPositionX;
+    }
+
+    public double getRobotPositionY() {
+        return robotPositionY;
+    }
+
+    public double getRobotDirection() {
+        return robotDirection;
+    }
+
+    public int getTargetPositionX() {
+        return targetPositionX;
+    }
+
+    public int getTargetPositionY() {
+        return targetPositionY;
+    }
 
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
@@ -98,7 +112,7 @@ public class RobotModel extends Observable {
         robotDirection = normalizeAngle(robotDirection + angularVelocity * duration);
 
         setChanged();
-        notifyObservers();
+        notifyObservers(new RobotState(robotPositionX, robotPositionY, robotDirection, targetPositionX, targetPositionY));
     }
 
 
@@ -110,5 +124,21 @@ public class RobotModel extends Observable {
         while (angle < 0) angle += 2 * Math.PI;
         while (angle >= 2 * Math.PI) angle -= 2 * Math.PI;
         return angle;
+    }
+
+    public class RobotState {
+        public final double x;
+        public final double y;
+        public final double direction;
+        public final int targetX;
+        public final int targetY;
+
+        public RobotState(double x, double y, double direction, int targetX, int targetY) {
+            this.x = x;
+            this.y = y;
+            this.direction = direction;
+            this.targetX = targetX;
+            this.targetY = targetY;
+        }
     }
 }
