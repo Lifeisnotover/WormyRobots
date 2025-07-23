@@ -1,6 +1,6 @@
 package tests;
 
-import src.gui.MainApplicationFrame;
+import src.controller.MainApplicationFrame;
 import org.junit.jupiter.api.Test;
 import javax.swing.*;
 import static org.junit.jupiter.api.Assertions.*;

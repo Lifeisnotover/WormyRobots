@@ -1,4 +1,4 @@
-package src.gui;
+package src.view;
 
 import java.awt.*;
 
@@ -6,9 +6,10 @@ import javax.swing.*;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 
-import src.log.LogChangeListener;
-import src.log.LogEntry;
-import src.log.LogWindowSource;
+import src.view.utilits.RestorableWindow;
+import src.model.log.LogChangeListener;
+import src.model.log.LogEntry;
+import src.model.log.LogWindowSource;
 
 public class LogWindow extends RestorableWindow implements LogChangeListener {
     private final LogWindowSource m_logSource;

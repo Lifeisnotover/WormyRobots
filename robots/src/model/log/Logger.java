@@ -1,4 +1,4 @@
-package src.log;
+package src.model.log;
 
 public final class Logger {
     private static final LogWindowSource defaultLogSource;

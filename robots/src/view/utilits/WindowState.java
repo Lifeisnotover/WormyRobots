@@ -1,4 +1,4 @@
-package src.gui;
+package src.view.utilits;
 
 import java.awt.*;
 import java.io.Serializable;
